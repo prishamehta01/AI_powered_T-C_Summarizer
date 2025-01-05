@@ -38,7 +38,7 @@ def summarize():
     bullet_summary = convert_to_bullet_points(raw_summary)
     
     # Return the bullet-point summary on the page
-    return render_template('index.html', summary=bullet_summary)
+    return render_template('index.html', content=content, summary=bullet_summary)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000, host='127.0.0.1')
