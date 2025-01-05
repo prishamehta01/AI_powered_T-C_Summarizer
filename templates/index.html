@@ -5,92 +5,209 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms and Conditions Summarizer</title>
     <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --card-bg: #242424;
+            --primary-color: #00ff9d;
+            --text-color: #ffffff;
+            --border-color: #333333;
+            --error-color: #ff4747;
+            --hover-color: #00cc7d;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-            color: #4CAF50;
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
         }
+
+h1 {
+    text-align: center;
+    margin: 2rem 0;
+    color: var(--text-color);
+    font-size: 2.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(120deg, var(--primary-color), #00c3ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 3rem;
+}
+
         form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 30px;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 255, 157, 0.1);
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
         }
+
         textarea {
-            width: 80%;
-            height: 200px;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            font-size: 1rem;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
             resize: vertical;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            font-family: inherit;
+            color: var(--text-color);
         }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+        }
+
         input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
+            background: linear-gradient(45deg, var(--primary-color), #00c3ff);
+            color: #000;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-top: 40px;
-        }
-        pre {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            transition: all 0.3s ease;
+            display: block;
             margin: 0 auto;
+            min-width: 200px;
+        }
+
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 157, 0.3);
+        }
+
+        .summary-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 255, 157, 0.1);
+            margin-top: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        pre {
+            background-color: var(--bg-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-color);
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 16px;
-            color: #333;
         }
-        .bullet-point {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 10px;
-            color: #333;
+
+        .loading-spinner {
+            display: none;
+            margin: 2rem auto;
+            text-align: center;
         }
-        .container {
-            width: 80%;
-            margin: 0 auto;
+
+        .loading-spinner::after {
+            content: '';
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-message {
+            background-color: rgba(255, 71, 71, 0.1);
+            color: var(--error-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 500;
+            border: 1px solid var(--error-color);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 0 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            form {
+                padding: 1.5rem;
+            }
+
+            input[type="submit"] {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>Terms and Conditions Summarizer</h1>
 
         <form action="/summarize" method="POST">
-            <textarea name="content" rows="10" placeholder="Enter the Terms and Conditions text here...">{{ request.form['content'] if request.form['content'] else '' }}</textarea>
+            {% if error %}
+                <div class="error-message">{{ error }}</div>
+            {% endif %}
+            <textarea 
+                name="content" 
+                placeholder="Enter the Terms and Conditions text here..."
+            >{{ request.form['content'] if request.form['content'] else '' }}</textarea>
+            <div class="loading-spinner" id="loadingSpinner"></div>
             <input type="submit" value="Summarize">
         </form>
 
         {% if summary %}
-            <h2>Summary:</h2>
-            <pre>{{ summary }}</pre>
+            <div class="summary-section">
+                <h2>Summary</h2>
+                <pre>{{ summary }}</pre>
+            </div>
         {% endif %}
     </div>
 
+    <script>
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+        });
+    </script>
 </body>
 </html>
